@@ -92,9 +92,7 @@ class API {
   async updateScorecardPositions(scorecards) {
     let promises = [];
     const scorecardsCollection = await this.getCollection("scorecards");
-    scorecards.map(s => {
-      promises.push(scorecardsCollection.updateOne({_id: s._id}, {$set: {position: s.position}}));
-    });
+    scorecards.map(s => promises.push(scorecardsCollection.updateOne({_id: s._id}, {$set: {position: s.position}})));
     let results = await Promise.all(promises);
     return results;
   }
