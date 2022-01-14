@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   deploy-realm-app:
     docker:
-      - image: cimg/node:<node-version>
+      - image: cimg/node:16
     steps:
       - checkout
       - restore_cache:
@@ -38,7 +38,7 @@ jobs:
             cp -r ./build/* /opt/realm_app/hosting/files
       - run: 
           name: Push the realm app
-          command: realm-cli push --remote={{ APP_ID }} --local=/opt/realm_app --include-hosting -y
+          command: realm-cli push --remote={{ .APP_ID }} --local=/opt/realm_app --include-hosting -y
 workflows:
   deploy_my_app:
     jobs:
