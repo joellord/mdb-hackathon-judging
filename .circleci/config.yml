@@ -21,7 +21,7 @@ jobs:
           command: npm run build
       - run:
           name: Install Realm-CLI
-          command: npm install -g realm-cli
+          command: npm install -g realm-cli@2
       - run:
           name: Login to Realm
           command: |
