@@ -24,12 +24,12 @@ jobs:
           command: npm install -g realm-cli
       - run:
           name: Login to Realm
-          command: realm-cli login --api-key="{{ REALM_PUBLIC_KEY }}" --private-api-key="{{ REALM_PRIVATE_KEY }}"
+          command: realm-cli login --api-key="$REALM_PUBLIC_KEY" --private-api-key="$REALM_PRIVATE_KEY"
       - run: 
           name: Pull current configuration
           command: |
             mkdir /opt/realm_app
-            realm-cli pull --remote={{ APP_ID }} --local=/opt/realm_app -y
+            realm-cli pull --remote=$APP_ID --local=/opt/realm_app -y
       - run:
           name: Copy the React app to the Realm hosting folder
           command: |
@@ -38,7 +38,7 @@ jobs:
             cp -r ./build/* /opt/realm_app/hosting/files
       - run: 
           name: Push the realm app
-          command: realm-cli push --remote={{ APP_ID }} --local=/opt/realm_app --include-hosting -y
+          command: realm-cli push --remote=$APP_ID --local=/opt/realm_app --include-hosting -y
 workflows:
   deploy_my_app:
     jobs:
