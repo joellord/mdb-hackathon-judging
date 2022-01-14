@@ -31,7 +31,7 @@ export default function Scorecard() {
       setScorecard(s);
     };
     main();
-  }, []);
+  }, [params.scorecardId]);
 
   useEffect(() => {
     let tech = techComplexity * techExecution;

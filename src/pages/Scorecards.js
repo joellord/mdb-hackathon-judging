@@ -22,7 +22,7 @@ export default function Scorecards() {
       setSelectedCategory(cat[params.id]);
     }
     main();
-  }, [params.id]);
+  }, [params]);
 
   return(
     <div>
