@@ -1,0 +1,46 @@
+version: 2.1
+ 
+jobs:
+  deploy-realm-app:
+    docker:
+      - image: cimg/node:<node-version>
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - node-deps-v1-{{ .Branch }}-{{checksum "package-lock.json"}}
+      - run:
+          name: install packages
+          command: npm ci
+      - save_cache:
+          key: node-deps-v1-{{ .Branch }}-{{checksum "package-lock.json"}}
+          paths:
+            - ~/.npm
+      - run:
+          name: Build React App
+          command: npm run build
+      - run:
+          name: Install Realm-CLI
+          command: npm install -g realm-cli
+      - run:
+          name: Login to Realm
+          command: realm-cli login --api-key="{{ .REALM_PUBLIC_KEY }}" --private-api-key="{{ .REALM_PRIVATE_KEY }}"
+      - run: 
+          name: Pull current configuration
+          command: |
+            mkdir /opt/realm_app
+            realm-cli pull --remote={{ .APP_ID }} --local=/opt/realm_app -y
+      - run:
+          name: Copy the React app to the Realm hosting folder
+          command: |
+            rm -rf /opt/realm_app/hosting
+            mkdir /opt/realm_app/hosting && mkdir /opt/realm_app/hosting/files
+            cp -r ./build/* /opt/realm_app/hosting/files
+      - run: 
+          name: Push the realm app
+          command: realm-cli push --remote={{ APP_ID }} --local=/opt/realm_app --include-hosting -y
+workflows:
+  deploy_my_app:
+    jobs:
+      - deploy-realm-app
+ 
