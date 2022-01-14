@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   deploy-realm-app:
     docker:
-      - image: cimg/node:16
+      - image: node:16
     steps:
       - checkout
       - restore_cache:
